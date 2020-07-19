@@ -1,0 +1,50 @@
+version: "3"
+services:
+  app:
+    image: node:14.5.0
+    volumes:
+      - .:/project
+    links:
+      - db
+    ports:
+      - 4000:4000 # app
+      - 8080:8080 # livereload
+    working_dir: /project
+    entrypoint: yarn
+    command: develop
+    environment:
+      - DEBUG=artgardeners:*
+
+  yarn:
+    image: node:14.5.0
+    volumes:
+      - .:/project
+    links:
+      - db
+    ports:
+      - 4000:4000
+    working_dir: /project
+    entrypoint: yarn
+    command: --help
+
+  db:
+    image: "postgres" # use latest official postgres version
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=artshare
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=artshare
+
+  pma:
+    image: dockage/phppgadmin:latest
+    links:
+      - db
+    ports:
+      - 8888:80
+    environment:
+      - PHP_PG_ADMIN_SERVER_HOST=db
+
+volumes:
+  database-data:
+    driver: local

@@ -1,0 +1,16 @@
+{% extends "./base.html" %}
+
+{% block body %}
+    <header>
+        <h1>ArtGardners</h1>
+        <nav>
+            <ul>
+                <li>
+                    <a href="/login">Login</a>
+                </li>
+                <li>Updates</li>
+                <li>Discussions</li>
+            </ul>
+        </header>
+        {% block content %}{% endblock %}
+    {% endblock %}
