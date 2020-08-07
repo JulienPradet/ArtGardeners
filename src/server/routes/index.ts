@@ -1,8 +1,13 @@
 import { FastifyPlugin, FastifyPluginOptions } from "fastify";
 import login from "./login";
 
-const app: FastifyPlugin<FastifyPluginOptions> = (fastify, options, done) => {
+const app: FastifyPlugin<FastifyPluginOptions> = (
+  fastify,
+  { prefix, ...options },
+  done
+) => {
   fastify.register(login, options);
+
   fastify.get("/", (request, reply) => {
     reply.view("/index.svelte", {
       user: request.user,

@@ -15,6 +15,7 @@ declare module "fastify" {
 }
 
 type SvelteComponent = {
+  svId: string[];
   preload?: (prisma: PrismaClient, request: FastifyRequest) => Promise<{}>;
   default: {
     render: (
@@ -65,6 +66,23 @@ const SveltePlugin: FastifyPlugin<FastifyPluginOptions> = (
       data,
     });
 
+    const regex = /<link rel="svComponent" href="([^"]+)" data-sv-id="([^"]+)" [^>]+>/g;
+    let matchComponents: RegExpExecArray | null = null;
+    let componentPaths = [];
+    while ((matchComponents = regex.exec(head)) !== null) {
+      componentPaths.push({
+        path: matchComponents[1],
+        svId: matchComponents[2],
+      });
+    }
+
+    const componentsMap = componentPaths.map(({ svId }, index) => {
+      return {
+        svId: svId,
+        componentName: `c${index}`,
+      };
+    });
+
     this.header("Content-Type", "text/html; charset=UTF-8").send(`
       <!DOCTYPE html>
       <html>
@@ -75,6 +93,24 @@ const SveltePlugin: FastifyPlugin<FastifyPluginOptions> = (
           <style>${css.code}</style>
         </head>
         <body>${html}</body>
+        <script type="module">
+          ${componentPaths
+            .map(({ path, svId }, index) => `import c${index} from "${path}"`)
+            .join("\n")}
+
+            const componentsMap = {${componentsMap
+              .map(
+                ({ svId, componentName }) =>
+                  `[${JSON.stringify(svId)}]: ${componentName}`
+              )
+              .join(",")}};
+ 
+              document.querySelectorAll("[data-sv-id]:not(link)").forEach((element) => {
+            const Component = componentsMap[element.dataset.svId]
+            const c = new Component({target: element, hydrate: true, props: {}})
+            
+          })
+        </script>
         ${
           process.env.NODE_ENV === "development"
             ? `

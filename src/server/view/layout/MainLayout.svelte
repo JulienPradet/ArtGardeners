@@ -13,9 +13,13 @@
 
 <script>
   import { _, setCurrentLocale } from "../modules/intl";
+  import Header from "./Header.svelte";
+  import Navigation from "./Navigation.svelte";
+  import Container from "./Container.svelte";
 
   export let locale;
   export let data;
+  export let title;
 
   setCurrentLocale(locale);
 
@@ -24,34 +28,52 @@
 </script>
 
 <style>
+  :root {
+    --c-blue-400: #151a42;
+    --c-blue-500: #090b1c;
+  }
+
+  :global(*) {
+    box-sizing: border-box;
+  }
+
   :global(body) {
     margin: 0;
+    font-family: Raleway, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+      Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+      sans-serif;
+    font-style: normal;
+    font-size: 1em;
+    line-height: 1.4;
+    color: #ffffff;
+    background: var(--c-blue-500);
+  }
+
+  .head {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .content {
+    margin-bottom: 5rem;
   }
 </style>
 
-<header>
-  <h1>
-    <a href="/">{_('ArtGardeners')}</a>
-  </h1>
-  <nav>
-    <ul>
-      <li>
-        {#if data.user}
-          <a href="/account">Account</a>
-        {:else}
-          <a href="/login">Login</a>
-        {/if}
-      </li>
-      <li>
-        {_('Updates ({value, plural, =0 {none} other {{value}}}) {value2}', {
-          values: {
-            value: updates,
-            value2: 2
-          }
-        })}
-      </li>
-      <li>Discussions</li>
-    </ul>
-  </nav>
-</header>
-<slot />
+<div class="head">
+  <Header {title} />
+</div>
+<div class="nav">
+  <Navigation />
+</div>
+<div class="content">
+  <slot />
+</div>

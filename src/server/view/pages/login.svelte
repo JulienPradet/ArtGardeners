@@ -22,7 +22,7 @@
 </script>
 
 <Layout data={data.layoutData}>
-  <form method="post" action="/login" novalidate>
+  <form method="post" action={'/' + locale + '/login'} novalidate>
     <div>
       <label for="email">Email</label>
       <input type="email" id="email" name="email" />
