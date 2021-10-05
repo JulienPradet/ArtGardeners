@@ -24,7 +24,7 @@
     "fastify-jwt": "^2.1.2",
     "fastify-plugin": "^2.0.0",
     "fastify-secure-session": "^1.2.0",
-    "fastify-static": "^3.2.0",
+    "fastify-static": "^4.2.4",
     "fluent-schema": "^1.0.4",
     "rollup": "^2.19.0",
     "rollup-plugin-output-manifest": "^1.0.2",
