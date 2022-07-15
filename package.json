@@ -28,7 +28,7 @@
     "fluent-schema": "^1.0.4",
     "rollup": "^2.19.0",
     "rollup-plugin-output-manifest": "^1.0.2",
-    "svelte": "^3.24.0",
+    "svelte": "^3.49.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
